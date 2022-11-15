@@ -41,15 +41,6 @@ begin
     pivotColumnIndex := extendedResultMatrix.FindPivotColumnIndex();    
     pivotRowIndex := extendedResultMatrix.FindPivotRowIndex(pivotColumnIndex);
     
-    Writeln('Разрешающий элемент: ', extendedResultMatrix.baseMatrix[pivotRowIndex, pivotColumnIndex]:0:2);
-    Writeln('Индекс (k, s): [', pivotRowIndex + 1, ', ' ,pivotColumnIndex, ']');
-    tempMatrix := JordanElimination(extendedResultMatrix.baseMatrix, (pivotRowIndex, pivotColumnIndex));
-    
-    extendedResultMatrix.baseMatrix := tempMatrix;
-    extendedResultMatrix.SwapRowAndColumnVariables(pivotRowIndex, pivotColumnIndex - 1);
-    Writeln('Преобразование ', matrixTransformationCount);
-    extendedResultMatrix.Print();
-    
     // поиск отрицательного элемента в столбце. begin
     var isAllColumnElementsNegative := true;
     for var i := 0 to extendedResultMatrix.baseMatrix.GetLength(0) - 2 do
@@ -67,6 +58,15 @@ begin
       exit;
     end;
     // поиск отрицательного элемента в столбце. end
+    
+    Writeln('Разрешающий элемент: ', extendedResultMatrix.baseMatrix[pivotRowIndex, pivotColumnIndex]:0:2);
+    Writeln('Индекс (k, s): [', pivotRowIndex + 1, ', ' ,pivotColumnIndex, ']');
+    tempMatrix := JordanElimination(extendedResultMatrix.baseMatrix, (pivotRowIndex, pivotColumnIndex));
+    
+    extendedResultMatrix.baseMatrix := tempMatrix;
+    extendedResultMatrix.SwapRowAndColumnVariables(pivotRowIndex, pivotColumnIndex - 1);
+    Writeln('Преобразование ', matrixTransformationCount);
+    extendedResultMatrix.Print();
     
     if (extendedResultMatrix.IsAllRowElementsNotNegative(
         extendedResultMatrix.baseMatrix.GetLength(0) - 1))
