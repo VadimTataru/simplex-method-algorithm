@@ -21,14 +21,30 @@ var
     (-10.0, -1.0, 2.0, 2.0, 0.0, -3.0)
   );
   
+  matrixExample4 := new real[7, 8] (
+    ( 1.0,  1.0,  1.0,  1.0,  0.0,  0.0,  0.0,  0.0),
+    ( 1.0,  1.0, -2.0,  0.0,  1.0,  0.0,  0.0,  0.0),
+    ( 2.0,  2.0,  3.0,  0.0,  0.0,  1.0,  0.0,  0.0),
+    ( 3.0,  3.0,  2.0,  0.0,  0.0,  0.0,  1.0,  0.0),
+    ( 1.0,  2.0,  2.0,  0.0,  0.0,  0.0,  0.0, -1.0),
+    ( 0.0,  1.0, -1.0,  0.0,  0.0,  0.0,  0.0,  0.0),
+    (-8.0, -9.0, -6.0, -1.0, -1.0, -1.0, -1.0,  1.0)
+  );
+  
   extendedMatrixExample1: MatrixLib.Matrix := (
     baseMatrix: matrixExample1;
     rowStringX: new string[5] ('-x1', '-x2', '-x3', '-x4', '-x5');
     columnStringX: new string[5] ('x6=', 'x7=', 'x8=', 'f=', 'g=');
   );
+  
+  extendedMatrixExample4: MatrixLib.Matrix := (
+    baseMatrix: matrixExample4;
+    rowStringX: new string[7] ('-x1', '-x2', '-x3', '-x4', '-x5', '-x6', '-x7');
+    columnStringX: new string[7] ('x8=', 'x9=', 'x10=', 'x11=', 'x12=', 'f=', 'g=');
+  );
 
 begin
-  extendedResultMatrix := extendedMatrixExample1;
+  extendedResultMatrix := extendedMatrixExample4;
   originFuncCoefficients := extendedResultMatrix.baseMatrix
     .Row(extendedResultMatrix.baseMatrix.GetLength(0) - 2).Skip(1).ToArray();
   
@@ -39,8 +55,6 @@ begin
   while (true) do
   begin
     pivotColumnIndex := extendedResultMatrix.FindPivotColumnIndex();    
-    pivotRowIndex := extendedResultMatrix.FindPivotRowIndex(pivotColumnIndex);
-    
     // поиск отрицательного элемента в столбце. begin
     var isAllColumnElementsNegative := true;
     for var i := 0 to extendedResultMatrix.baseMatrix.GetLength(0) - 2 do
@@ -59,12 +73,14 @@ begin
     end;
     // поиск отрицательного элемента в столбце. end
     
+    pivotRowIndex := extendedResultMatrix.FindPivotRowIndex(pivotColumnIndex);    
     Writeln('Разрешающий элемент: ', extendedResultMatrix.baseMatrix[pivotRowIndex, pivotColumnIndex]:0:2);
     Writeln('Индекс (k, s): [', pivotRowIndex + 1, ', ' ,pivotColumnIndex, ']');
-    tempMatrix := JordanElimination(extendedResultMatrix.baseMatrix, (pivotRowIndex, pivotColumnIndex));
     
+    tempMatrix := JordanElimination(extendedResultMatrix.baseMatrix, (pivotRowIndex, pivotColumnIndex));
     extendedResultMatrix.baseMatrix := tempMatrix;
     extendedResultMatrix.SwapRowAndColumnVariables(pivotRowIndex, pivotColumnIndex - 1);
+    
     Writeln('Преобразование ', matrixTransformationCount);
     extendedResultMatrix.Print();
     
@@ -143,12 +159,12 @@ begin
       end;
       
       // вывод ответа
-      Write('x = ');
+      Write('x = [ ');
       for var i := 0 to xValues.Length - 1 do
       begin
-        Write(xValues[i], '  ');
+        Write(xValues[i]:0:3, '  ');
       end;
-      Writeln();
+      Writeln(']');
       
       var answer := 0.0;
       for var i := 0 to extendedResultMatrix.baseMatrix.ColCount() - 2 do

@@ -113,7 +113,7 @@ begin
     currentElement := self.baseMatrix[lastRowIndex, i];
     if (currentElement < 0) then
     begin
-      absElement := Abs(self.baseMatrix[lastRowIndex, i]);
+      absElement := Abs(currentElement);
       if (absElement > maxAbsElement) then
       begin  
         maxAbsElement := absElement;
